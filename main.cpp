@@ -127,6 +127,9 @@ int main () {
         case ALLEGRO_KEY_RIGHT:
           keyIsPressed[key_right] = true;
           break;
+        case ALLEGRO_KEY_LSHIFT:
+          character.Run();
+          break;
         default:
           break;
       }
@@ -147,6 +150,9 @@ int main () {
           break;
         case ALLEGRO_KEY_RIGHT:
           keyIsPressed[key_right] = false;
+          break;
+        case ALLEGRO_KEY_LSHIFT:
+          character.Walk();
           break;
         default:
           break;

@@ -24,7 +24,7 @@
 const unsigned int constFrames = 8;
 const unsigned int updatesPerFrame = 4;
 const float scale = 4.0/3.0;
-const float speed = 8.0/updatesPerFrame;
+const float baseSpeed = 8.0/updatesPerFrame;
 
 enum State { stopped, moving };
 enum Direction { en_north=0, en_northeast=1, en_east=2, en_southeast=3, 
@@ -45,13 +45,23 @@ class Character {
       state = moving;
       direction = d;
     }
+    void Run () {
+      isRunning = true;
+      speed = 2*baseSpeed;
+    }
+    void Walk () {
+      isRunning = false;
+      speed = baseSpeed;
+    }
   private:
     float x, y;
     unsigned int frame, updateCount;
+    bool isRunning;
+    float speed;
 
     State state;
     Direction direction;
-    ALLEGRO_BITMAP *bitmap_stopped, *bitmap_walking;
+    ALLEGRO_BITMAP *bitmap_stopped, *bitmap_walking, *bitmap_running;
 };
 
 #endif

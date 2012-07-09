@@ -30,18 +30,23 @@ Character::Character () {
   y = 400;
   updateCount = 0;
   frame = 0;
+  speed = baseSpeed;
+  isRunning = false;
   state = stopped;
   direction = en_south;
   string path("Images/Character/walking ");
 
   bitmap_walking = al_load_bitmap("Images/Character/walking.bmp");
   bitmap_stopped = al_load_bitmap("Images/Character/stopped.bmp");
+  bitmap_running = al_load_bitmap("Images/Character/running.bmp");
 
   al_convert_mask_to_alpha(bitmap_walking, al_map_rgb(111, 79, 51));
   al_convert_mask_to_alpha(bitmap_stopped, al_map_rgb(111, 79, 51));
+  al_convert_mask_to_alpha(bitmap_running, al_map_rgb(111, 79, 51));
 }
 
 Character::~Character () {
+  al_destroy_bitmap(bitmap_running);
   al_destroy_bitmap(bitmap_walking);
   al_destroy_bitmap(bitmap_stopped);
 }
@@ -61,43 +66,43 @@ void Character::Update () {
   switch (direction) {
     case en_north:
       y -= speed;
-      if (y <= -96) y = 720;
+      if (y <= -48) y = 720 + 48;
       break;
     case en_south:
       y += speed;
-      if (y >= 720) y = -96;
+      if (y >= 720 + 48) y = -48;
       break;
     case en_east:
       x += speed*scale;
-      if (x >= 1280) x = -96;
+      if (x >= 1280 + 48) x = -48;
       break;
     case en_west:
       x -= speed*scale;
-      if (x <= -96) x = 1280;
+      if (x <= -48) x = 1280 + 48;
       break;
     case en_northwest:
       x -= speed*scale/aux;
       y -= speed/aux;
-      if (y <= -96) y = 720;
-      if (x <= -96) x = 1280;
+      if (y <= -48) y = 720 + 48;
+      if (x <= -48) x = 1280 + 48;
       break;
     case en_northeast:
       x += speed*scale/aux;
       y -= speed/aux;
-      if (y <= -96) y = 720;
-      if (x >= 1280) x = -96;
+      if (y <= -48) y = 720 + 48;
+      if (x >= 1280 + 48) x = -48;
       break;
     case en_southwest:
       x -= speed*scale/aux;
       y += speed/aux;
-      if (y >= 720) y = -96;
-      if (x <= -96) x = 1280;
+      if (y >= 720 + 48) y = -48;
+      if (x <= -48) x = 1280 + 48;
       break;
     case en_southeast:
       x += speed*scale/aux;
       y += speed/aux;
-      if (y >= 720) y = -96;
-      if (x >= 1280) x = -96;
+      if (y >= 720 + 48) y = -48;
+      if (x >= 1280 + 48) x = -48;
       break;
     default:
       break;
@@ -105,8 +110,10 @@ void Character::Update () {
 }
 
 void Character::Draw () const {
-  if (state == moving)
+  if ( (state == moving) && (!isRunning) )
     al_draw_bitmap_region(bitmap_walking, frame*96, direction*96, 96, 96, x - 48, y - 48, 0);
+  else if ( (state == moving) && isRunning)
+    al_draw_bitmap_region(bitmap_running, frame*96, direction*96, 96, 96, x - 48, y - 48, 0);
   else if (state == stopped)
     al_draw_bitmap_region(bitmap_stopped, 0, direction*96, 96, 96, x - 48, y - 48, 0);
 }
