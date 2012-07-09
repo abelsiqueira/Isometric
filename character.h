@@ -27,8 +27,8 @@ const float scale = 4.0/3.0;
 const float speed = 8.0/updatesPerFrame;
 
 enum State { stopped, moving };
-enum Direction { en_north, en_northeast, en_east, en_southeast, en_south, 
-                 en_southwest, en_west, en_northwest };
+enum Direction { en_north=0, en_northeast=1, en_east=2, en_southeast=3, 
+                 en_south=4, en_southwest=5, en_west=6, en_northwest=7 };
 
 class Character {
   public:
@@ -51,8 +51,7 @@ class Character {
 
     State state;
     Direction direction;
-    ALLEGRO_BITMAP **east, **west, **north, **south, **northwest,
-                   **northeast, **southeast, **southwest;
+    ALLEGRO_BITMAP *bitmap_stopped, *bitmap_walking;
 };
 
 #endif

@@ -1,3 +1,5 @@
 *.[oa]
 *~
 main
+*.swp
+Screenshots/
