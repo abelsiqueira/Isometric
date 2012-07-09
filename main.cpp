@@ -1,3 +1,20 @@
+/* Copyright 2012 - Abel Soares Siqueira
+ * 
+ * This file is part of Isometric.
+ * 
+ * Isometric is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * Isometric is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with Isometric.  If not, see <http://www.gnu.org/licenses/>.
+ */
 #include <iostream>
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_primitives.h>
@@ -29,6 +46,8 @@ int main () {
 
   ALLEGRO_BITMAP *tileFile;
   ALLEGRO_BITMAP *tile;
+  ALLEGRO_BITMAP *floor;
+
   float tileVertical = 48.0; 
   float tileHorizontal = tileVertical*4.0/3.0;
   ALLEGRO_COLOR tileColor(al_map_rgb(50, 50, 50));
@@ -37,10 +56,19 @@ int main () {
   al_convert_mask_to_alpha(tileFile, al_map_rgb(128, 128, 128));
   al_convert_mask_to_alpha(tileFile, al_map_rgb(191, 123, 199));
   tile = al_create_bitmap(2*tileHorizontal, 2*tileVertical);
+  floor= al_create_bitmap(1280, 720);
 
   al_set_target_bitmap(tile);
   al_draw_bitmap_region(tileFile, 2*tileHorizontal*4, 2*tileVertical*4, 
       2*tileHorizontal, 2*tileVertical, 0, 0, 0);
+
+  al_set_target_bitmap(floor);
+  for (float x = 0.0; x <= 1280; x += 2*tileHorizontal) {
+    for (float y = 0.0; y <= 720; y += 2.0*tileVertical) {
+      al_draw_bitmap(tile, x, y, 0);
+      al_draw_bitmap(tile, x - tileHorizontal, y - tileVertical, 0);
+    }
+  }
   al_set_target_bitmap(al_get_backbuffer(display));
 
   Character character;
@@ -129,12 +157,7 @@ int main () {
       redraw = false;
       al_clear_to_color(al_map_rgb_f(0.0, 0.0, 0.0));
 
-      for (float x = 0.0; x <= 1280; x += 2*tileHorizontal) {
-        for (float y = 0.0; y <= 720; y += 2.0*tileVertical) {
-          al_draw_bitmap(tile, x, y, 0);
-          al_draw_bitmap(tile, x - tileHorizontal, y - tileVertical, 0);
-        }
-      }
+      al_draw_bitmap(floor, 0, 0, 0);
 
       character.Draw();
 
